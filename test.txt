@@ -1,0 +1,1 @@
+This repository stores the code for flask project(car registration)
