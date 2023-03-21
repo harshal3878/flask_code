@@ -2,6 +2,7 @@ import mysql.connector
 from flask import Flask,  request
 from flask_cors import CORS
 import json
+from werkzeug.serving import make_server
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -29,3 +30,22 @@ def order_vehicle():
       return {"status_code" : 200}
    except Exception as e:
       return {"error" : e, "status_code":500}
+
+@app.post('/shutdown')
+def shutdown():
+   data = request.json
+   password = str(data["password"])
+   
+   if password == "harshal":
+      print("shutting down")
+      shutdown_server()
+      return " stopped"
+   else :
+      print("wrong password")
+      return "password is not correct"
+
+def shutdown_server():
+   func = request.environ.get('werkzeug.server.shutdown')
+   if func is None:
+      raise RuntimeError('Not running with the Werkzeug Server')
+   func()
